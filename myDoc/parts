@@ -1,0 +1,61 @@
+
+
+     +———————————————————+
+     |                   |
+     |  Google Calendar  |
+     |                   |
+     +———————————————————+
+          ^    |
+          |    | A
+          |    v
+     +—————————————+   B   +———————————————+
+     |             |<——————|               |
+     | Java Daemon |       |  File System  |
+     |             |——————>|               |
+     +—————————————+       +———————————————+
+          ^    |            ^  |       ^  |
+          |    | C          |  | D     |  |
+          |    v            |  v       |  |
+     +—————————————————————————+       |  |
+     |                         |       |  |
+     |     Bash Interface      |       |  | E
+     |                         |       |  |
+     +—————————————————————————+       |  |
+                   ^  |                |  |
+                   |  | F              |  |
+                   |  v                |  v
+     +—————————————————————————————————————+
+     |                                     |
+     |           User / Terminal           |
+     |                                     |
+     +—————————————————————————————————————+
+
+
+while daemon is active, send all file events to the server
+directory changes should not be sent,
+	this allows for easy toggling of which days to send and which not to send
+
+
+about once an hour or once a day the system should take a snapshot of the file
+system, it should then compare it to the last snapshot. Any changes in file
+should be sent to the server. (This is if the daemon missed some changes, either
+due to an error, or due to the daemon being temporarly murdered)
+	simmalar to this (written in bash)
+		ls -Rl ~/calendar > newSnapshot
+		diff oldSnapshot newSnapshot
+		sendEventsToServer
+		mv newSnapshot oldSnapshot
+
+
+About once an hour, or when the user requests it, the daemon should pull data
+from the server and write it to the filetsystem
+
+
+Creating events localy should be done by just creating a file in the correct
+place in the filesystem.
+
+
+the bash interface should allow for simple command giving information about
+parts of the filesystem. for example ``calendar today`` would return a list
+of calendar events for the current day.
+
