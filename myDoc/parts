@@ -59,3 +59,38 @@ the bash interface should allow for simple command giving information about
 parts of the filesystem. for example ``calendar today`` would return a list
 of calendar events for the current day.
 
+——————————————————————————————————————————————————
+
+main creates a live directoryWatcher and a semi-passive directory logger
+When either of them detect an event, they add the event to the event que
+(the event que makes sure that the same event isn't submitted more than once, 
+this may be a concern if both the live and passive directory wather detect the 
+change (which they are suposed to do))
+
+The eventQue will call the API and upload the events when its convinient to do
+so. (ASAP, but user may be offline, or creating very many objects at once,
+which might recuire some throttling)
+
+
+A semi-sepparate part of the program will periodicly check the API for updates
+to the server. This should also connect to the part of the program logging
+events uploaded, to prevent a download and upload loop.
+
+
+the downloader sholud only download to dates "existing", meaning that their
+directories exist.
+Only dates deamed relevant by the program will get auto downloaded and checked
+on the update cycle. ( I might change my idea here if the API get calls are much
+cheaper than expected )
+
+
+The (bash) interface should be able to:
+* get latest update time
+* get status of event que
+* Force an upload scan
+* force a download from the server
+* querry an download for odd dates 
+The bash part should also be able to do some other things, not tied to the
+server:
+* get list of todays event
+* get list of events in time interval
