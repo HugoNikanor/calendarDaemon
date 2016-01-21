@@ -4,7 +4,9 @@ import java.io.IOException;
 
 public class Main {
 	public static void main( String[] args ) throws IOException {
-		new directoryMonitor.DirectoryWatcher();
+		//new directoryMonitor.DirectoryWatcher();
+		//new eventDownloader.Test();
+		new eventUploader.Test();
 
 		/*
 		main creates a live directoryWatcher and a semi-passive directory logger

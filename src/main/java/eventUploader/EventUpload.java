@@ -1,0 +1,24 @@
+package eventUploader;
+
+import java.io.IOException;
+
+import com.google.api.services.calendar.model.Event;
+
+import serverConnection.APIConnection;
+
+public class EventUpload {
+
+	/*
+	 * maybe this should be static
+	 */
+	public void upload( Event event ) {
+
+		String calendarId = "primary";
+		try {
+			event = APIConnection.getCalendarService().events().insert(calendarId, event).execute();
+			System.out.println( "event uploaded" );
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+}
