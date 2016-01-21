@@ -12,6 +12,9 @@ import java.nio.file.WatchService;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashMap;
 import java.util.Map;
+
+import eventUploader.EventQue;
+
 import java.nio.file.StandardWatchEventKinds;
 import java.nio.file.WatchEvent;
 
@@ -20,8 +23,12 @@ public class DirectoryWatcher {
 	private WatchService watcher;
 	private Map<WatchKey, Path> keys;
 
+	private EventQue que;
+
 	public DirectoryWatcher() throws IOException {
 		System.out.println( "direcotryWatcher created" );
+
+		que = new EventQue();
 
 		keys = new HashMap<WatchKey, Path>();
 		watcher = FileSystems.getDefault().newWatchService();
@@ -40,7 +47,7 @@ public class DirectoryWatcher {
 			
 			// dir == null check here maybe
 
-			//Path dir = keys.get( key );
+			Path dir = keys.get( key );
 			if( key.isValid() ) {
 				for( WatchEvent<?> event : key.pollEvents() ) {
 					@SuppressWarnings("unchecked")
@@ -49,11 +56,13 @@ public class DirectoryWatcher {
 					WatchEvent.Kind<?> kind = event.kind();
 
 					Path path = ev.context();
+					String fullPath = dir.toString().concat("/").concat( path.toString() );
 
 					System.out.println( kind.name() );
 					if( kind.name().equals( "ENTRY_CREATE" ) ) {
 						// register further events
-						System.out.println( path );
+						System.out.println( fullPath );
+						que.addEvent( fullPath );
 						// this seems to always call ENTRY_MODIFY as well
 					} else if( kind.name().equals( "ENTRY_DELETE" ) ) {
 						System.out.println( path );
