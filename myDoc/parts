@@ -83,6 +83,15 @@ Only dates deamed relevant by the program will get auto downloaded and checked
 on the update cycle. ( I might change my idea here if the API get calls are much
 cheaper than expected )
 
+THE SERVER CONNECTION PACKET
+APIConnection — Singleton for authentication code
+# these two should be interfacable by the interface
+EventFetcher — Download events from server
+EventQue — Handle uploading of event to server
+
+Those two should maybe be wrapped in an eventHandler class,
+then filtering the events when the time has come
+
 
 The (bash) interface should be able to:
 * get latest update time
