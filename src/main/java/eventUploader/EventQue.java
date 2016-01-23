@@ -33,7 +33,7 @@ public class EventQue {
 			synchronized( this ) {
 				while( true ) {
 					while( events.size() > 0 ) {
-						new EventParser( events.get(0) );
+						EventUpload.upload( new EventCreator( events.get(0) ).getEvent() );
 						events.remove( 0 );
 					}
 					try {

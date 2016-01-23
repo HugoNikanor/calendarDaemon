@@ -8,10 +8,8 @@ import serverConnection.APIConnection;
 
 public class EventUpload {
 
-	/*
-	 * maybe this should be static
-	 */
-	public void upload( Event event ) {
+	// is this thread safe
+	public static void upload( Event event ) {
 
 		String calendarId = "primary";
 		try {

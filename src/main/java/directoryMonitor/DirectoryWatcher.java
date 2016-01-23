@@ -60,17 +60,15 @@ public class DirectoryWatcher {
 
 					System.out.println( kind.name() );
 					if( kind.name().equals( "ENTRY_CREATE" ) ) {
-						// register further events
 						System.out.println( fullPath );
 						que.addEvent( fullPath );
-						// this seems to always call ENTRY_MODIFY as well
+					} else if( kind.name().equals( "ENTRY_MODIFY" ) ) {
+						System.out.println( path );
+						//que.addEvent( fullPath );
 					} else if( kind.name().equals( "ENTRY_DELETE" ) ) {
 						System.out.println( path );
 						// dir delete should "unregister the dir"
 						// file deletion sholud delete the event
-					} else if( kind.name().equals( "ENTRY_MODIFY" ) ) {
-						// put event in upload and sync que
-						System.out.println( path );
 					} else {
 						continue;
 					}

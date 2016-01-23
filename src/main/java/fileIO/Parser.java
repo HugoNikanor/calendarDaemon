@@ -1,19 +1,17 @@
-package eventUploader;
+package fileIO;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.text.SimpleDateFormat;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
-import com.google.api.client.util.DateTime;
-import com.google.api.services.calendar.model.Event;
-import com.google.api.services.calendar.model.EventDateTime;
+public class Parser {
 
-public class EventParser {
+	private Map<String, String> values;
 
-	public EventParser( String filePath ) {
+	public Parser( String filePath ) {
 		/*
 		EventDateTime startTime = new EventDateTime()
 			.setDateTime(new DateTime(new Date(System.currentTimeMillis()) ) )
@@ -30,17 +28,41 @@ public class EventParser {
 			.setEnd( endTime);
 		*/	
 
-		Event event = new Event();
 
 		try {
-			File eventFile = new File( filePath );
-			event.setSummary( eventFile.getName() );
+			values = Collections.synchronizedMap( new HashMap<String, String>() );
 
-			BufferedReader br = new BufferedReader( new FileReader( eventFile ) );
+			File file = new File( filePath );
 
-			String rawDate = eventFile.getAbsolutePath();
+			BufferedReader br = new BufferedReader( new FileReader( file ) );
+
+			String line;
+			while( (line = br.readLine()) != null ) {
+				String key;
+				String value;
+
+				int sepPos = line.indexOf( ':' );
+				if( sepPos != -1 ) {
+					key = line.substring(0, sepPos);
+					value = line.substring( sepPos + 1 );
+
+					// removes surrounding whitespace
+					value = value.trim();
+
+					values.put( key, value );
+				}
+			}
+
+			values.put( "summary", file.getName() );
+			// TODO this puts the whole path, it should only put the date part (2016/jan/22)
+			values.put( "start-date", file.getPath() );
+
+
+
+			/*
+			String rawDate = file.getAbsolutePath();
 			String date;
-			String regexPattern = ".*calendar/(.*/.*/.*)/.*";
+			String regexPattern = ".*calendar/(.* /.* /.*)/.*";
 			Pattern r = Pattern.compile( regexPattern );
 			Matcher m = r .matcher( rawDate );
 			if( m.find() ) {
@@ -57,6 +79,7 @@ public class EventParser {
 				String key = line.substring(0, colonPos);
 				String value = line.substring( ++colonPos );
 
+				/*
 				switch( key ) {
 					case "desc":
 						event.setDescription( value );
@@ -82,15 +105,21 @@ public class EventParser {
 						break;
 				}
 				System.out.println( key.concat(":").concat(value) );
+				*/
 
 
-			}
 			br.close();
 		} catch( Exception e ) {
 			e.printStackTrace();
 		}
+	}
 
+	// both of these should maybe throw some sort of error
+	public String get( String key ) {
+		return values.get( key );
+	}
 
-		new EventUpload().upload( event );
+	public String get( String key, String defaultValue ) {
+		return values.getOrDefault( key, defaultValue );
 	}
 }
