@@ -59,14 +59,16 @@ public class DirectoryWatcher {
 					String fullPath = dir.toString().concat("/").concat( path.toString() );
 
 					System.out.println( kind.name() );
+					// TODO stop this from picking up directories and hidden files
 					if( kind.name().equals( "ENTRY_CREATE" ) ) {
 						System.out.println( fullPath );
 						que.addEvent( fullPath );
 					} else if( kind.name().equals( "ENTRY_MODIFY" ) ) {
 						System.out.println( path );
-						//que.addEvent( fullPath );
+						que.addEvent( fullPath );
 					} else if( kind.name().equals( "ENTRY_DELETE" ) ) {
 						System.out.println( path );
+						//que.addEvent( fullPath );
 						// dir delete should "unregister the dir"
 						// file deletion sholud delete the event
 					} else {

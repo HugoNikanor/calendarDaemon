@@ -6,10 +6,13 @@ import java.io.FileReader;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Parser {
 
 	private Map<String, String> values;
+	private static Map<String, String> defaultValues;
 
 	public Parser( String filePath ) {
 		/*
@@ -28,8 +31,34 @@ public class Parser {
 			.setEnd( endTime);
 		*/	
 
-
 		try {
+			if( defaultValues == null ) {
+				defaultValues = Collections.synchronizedMap( new HashMap<String, String>() );
+
+				File file = new File( "/home/hugo/calendar/.meta/defaultSettings" );
+
+				BufferedReader br = new BufferedReader( new FileReader( file ) );
+
+				String line;
+				while( (line = br.readLine()) != null ) {
+					String key;
+					String value;
+
+					int sepPos = line.indexOf( ':' );
+					if( sepPos != -1 ) {
+						key = line.substring(0, sepPos);
+						value = line.substring( sepPos + 1 );
+
+						// removes surrounding whitespace
+						value = value.trim();
+
+						defaultValues.put( key, value );
+					}
+				}
+
+				br.close();
+			}
+
 			values = Collections.synchronizedMap( new HashMap<String, String>() );
 
 			File file = new File( filePath );
@@ -54,58 +83,14 @@ public class Parser {
 			}
 
 			values.put( "summary", file.getName() );
+
 			// TODO this puts the whole path, it should only put the date part (2016/jan/22)
-			values.put( "start-date", file.getPath() );
+			Pattern p = Pattern.compile( ".*(\\d{4}+/.../\\d+).*" );
+			Matcher m = p.matcher( file.getPath() );
+			if( m.matches() )
+				values.put( "startDate", m.group( 1 ) );
 
 
-
-			/*
-			String rawDate = file.getAbsolutePath();
-			String date;
-			String regexPattern = ".*calendar/(.* /.* /.*)/.*";
-			Pattern r = Pattern.compile( regexPattern );
-			Matcher m = r .matcher( rawDate );
-			if( m.find() ) {
-				date = m.group( 1 );
-			} else {
-				date = "1970/jan/01";
-			}
-
-			while( true ) {
-				String line = br.readLine();
-				if( line == null ) break;
-
-				int colonPos = line.indexOf(':');
-				String key = line.substring(0, colonPos);
-				String value = line.substring( ++colonPos );
-
-				/*
-				switch( key ) {
-					case "desc":
-						event.setDescription( value );
-						break;
-					case "start-time":
-						
-						event.setStart( new EventDateTime()
-								.setDateTime( new DateTime( 
-										new SimpleDateFormat( "yyyy/MMM/dd HH:mm" ).parse( date.concat( value ) ) ) ) 
-								.setTimeZone( "Europe/Stockholm" ));
-						break;
-					case "end-time":
-						event.setEnd( new EventDateTime()
-								.setDateTime( new DateTime( 
-										new SimpleDateFormat( "yyyy/MMM/dd HH:mm" ).parse( date.concat( value ) ) ) ) 
-								.setTimeZone( "Europe/Stockholm" ));
-						break;
-					case "location":
-						event.setLocation( value );
-						break;
-					default:
-						System.out.println( "Bad data" );
-						break;
-				}
-				System.out.println( key.concat(":").concat(value) );
-				*/
 
 
 			br.close();
@@ -116,10 +101,13 @@ public class Parser {
 
 	// both of these should maybe throw some sort of error
 	public String get( String key ) {
-		return values.get( key );
+		return values.containsKey( key ) ?
+		   	values.get( key ) : defaultValues.get( key );
 	}
 
+	/*
 	public String get( String key, String defaultValue ) {
 		return values.getOrDefault( key, defaultValue );
 	}
+	*/
 }

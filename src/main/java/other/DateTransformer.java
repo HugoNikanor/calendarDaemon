@@ -5,9 +5,19 @@ import java.util.regex.Pattern;
 
 public class DateTransformer {
 
+	/**
+	 * @param startTime
+	 *            What the endTime is relative to, on the from 'hh:mm' or
+	 *            'hh.mm'
+	 * @param relativeEndTime
+	 *            How long time the endtime is after the start time.
+	 *            Input on the form +1h2m.
+	 *            Notice that the '+' is required, and that the 
+	 *            'h' &amp; 'm' are letters. 
+	 *            Each number letter block is optional (1h &amp; 2m)
+	 */
 	public static String relativeToAbsolute( String startTime, String relativeEndtime ) {
 
-		// h (hour), m (minute)
 		startTime = startTime.replace( ".", ":" );
 		int sepIndex = startTime.indexOf( ':' );
 		int hours;

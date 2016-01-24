@@ -6,33 +6,41 @@
 package eventUploader;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class EventQue {
 
 	private static List<String> events;
+	private static EventThread thread;
 
 	public EventQue() {
 		if( events == null ) {
-			events = new ArrayList<String>();
+			events = Collections.synchronizedList( new ArrayList<String>() );
 		}
 
-		new Thread( new EventThread() ).start();
+		if( thread == null ) {
+			thread = new EventThread();
+			new Thread( thread ).start();
+		}
 	}
 
 	// TODO this should either also take time modified,
 	// or it should just take calendar events
 	public void addEvent( String path ) {
 		events.add( path );
+		System.out.println( path + "added" );
 	}
 
 	private class EventThread implements Runnable {
 
 		@Override
 		public void run() {
+			System.out.println( "thread started" );
 			synchronized( this ) {
 				while( true ) {
 					while( events.size() > 0 ) {
+						System.out.println( "creating the event" );
 						EventUpload.upload( new EventCreator( events.get(0) ).getEvent() );
 						events.remove( 0 );
 					}
