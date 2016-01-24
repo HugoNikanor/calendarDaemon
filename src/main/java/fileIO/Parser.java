@@ -3,6 +3,7 @@ package fileIO;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.nio.file.Path;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +15,7 @@ public class Parser {
 	private Map<String, String> values;
 	private static Map<String, String> defaultValues;
 
-	public Parser( String filePath ) {
+	public Parser( Path filePath ) {
 		/*
 		EventDateTime startTime = new EventDateTime()
 			.setDateTime(new DateTime(new Date(System.currentTimeMillis()) ) )
@@ -61,8 +62,9 @@ public class Parser {
 
 			values = Collections.synchronizedMap( new HashMap<String, String>() );
 
-			File file = new File( filePath );
+			File file = filePath.toFile();
 
+			// this fails with FileNotFoundException if a directory is given
 			BufferedReader br = new BufferedReader( new FileReader( file ) );
 
 			String line;

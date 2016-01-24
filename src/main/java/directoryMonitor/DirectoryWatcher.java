@@ -44,33 +44,31 @@ public class DirectoryWatcher {
 				// if the event wasn't really taken just look for the next event
 				return;
 			}
-			
-			// dir == null check here maybe
 
-			Path dir = keys.get( key );
 			if( key.isValid() ) {
 				for( WatchEvent<?> event : key.pollEvents() ) {
-					@SuppressWarnings("unchecked")
-					WatchEvent<Path> ev = (WatchEvent<Path>) event;
-
 					WatchEvent.Kind<?> kind = event.kind();
 
-					Path path = ev.context();
-					String fullPath = dir.toString().concat("/").concat( path.toString() );
+					if( kind.equals( "OWERFLOW" ) ) continue;
 
-					System.out.println( kind.name() );
-					// TODO stop this from picking up directories and hidden files
+					Path path = ((Path) event.context()).toAbsolutePath();
+
+					System.out.println( "kind: " + kind.name() );
+					System.out.println( "path: " + path );
+
+					if( !path.toFile().isDirectory() ) {
+						System.out.print( path.toFile().toString() );
+						System.out.println( " is directory" );
+						continue;
+					}
+					if( path.toFile().isHidden() ) continue;
+
 					if( kind.name().equals( "ENTRY_CREATE" ) ) {
-						System.out.println( fullPath );
-						que.addEvent( fullPath );
+						que.addEvent( path );
 					} else if( kind.name().equals( "ENTRY_MODIFY" ) ) {
-						System.out.println( path );
-						que.addEvent( fullPath );
+						que.addEvent( path );
 					} else if( kind.name().equals( "ENTRY_DELETE" ) ) {
 						System.out.println( path );
-						//que.addEvent( fullPath );
-						// dir delete should "unregister the dir"
-						// file deletion sholud delete the event
 					} else {
 						continue;
 					}
@@ -85,12 +83,14 @@ public class DirectoryWatcher {
 			@Override
 			public FileVisitResult preVisitDirectory( Path dir, BasicFileAttributes attrs ) 
 			throws IOException {
-				WatchKey key = dir.register( watcher,
-						StandardWatchEventKinds.ENTRY_CREATE,
-						StandardWatchEventKinds.ENTRY_DELETE,
-						StandardWatchEventKinds.ENTRY_MODIFY);
+				if( !dir.toFile().isHidden() ) {
+					WatchKey key = dir.register( watcher,
+							StandardWatchEventKinds.ENTRY_CREATE,
+							StandardWatchEventKinds.ENTRY_DELETE,
+							StandardWatchEventKinds.ENTRY_MODIFY);
 
-				keys.put(key, dir);
+					keys.put(key, dir);
+				}
 
 				return FileVisitResult.CONTINUE;
 			}

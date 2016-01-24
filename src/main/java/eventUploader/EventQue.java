@@ -5,18 +5,19 @@
 
 package eventUploader;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class EventQue {
 
-	private static List<String> events;
+	private static List<Path> events;
 	private static EventThread thread;
 
 	public EventQue() {
 		if( events == null ) {
-			events = Collections.synchronizedList( new ArrayList<String>() );
+			events = Collections.synchronizedList( new ArrayList<Path>() );
 		}
 
 		if( thread == null ) {
@@ -27,9 +28,9 @@ public class EventQue {
 
 	// TODO this should either also take time modified,
 	// or it should just take calendar events
-	public void addEvent( String path ) {
+	public void addEvent( Path path ) {
+		System.out.println( path + " added" );
 		events.add( path );
-		System.out.println( path + "added" );
 	}
 
 	private class EventThread implements Runnable {
@@ -41,6 +42,8 @@ public class EventQue {
 				while( true ) {
 					while( events.size() > 0 ) {
 						System.out.println( "creating the event" );
+						// this is probably the right place to do the final check
+						// if the event is "fine"
 						EventUpload.upload( new EventCreator( events.get(0) ).getEvent() );
 						events.remove( 0 );
 					}

@@ -1,5 +1,6 @@
 package eventUploader;
 
+import java.nio.file.Path;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -38,7 +39,7 @@ public class EventCreator {
 	// status
 	private Event event;
 
-	public EventCreator( String path ) {
+	public EventCreator( Path path ) {
 		event = new Event();
 
 		Parser parser = new Parser( path );
