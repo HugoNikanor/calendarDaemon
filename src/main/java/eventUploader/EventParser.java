@@ -13,7 +13,7 @@ import com.google.api.services.calendar.model.EventDateTime;
 
 public class EventParser {
 
-	public EventParser( String filePath ) {
+	public EventParser( File eventFile ) {
 		/*
 		EventDateTime startTime = new EventDateTime()
 			.setDateTime(new DateTime(new Date(System.currentTimeMillis()) ) )
@@ -33,7 +33,6 @@ public class EventParser {
 		Event event = new Event();
 
 		try {
-			File eventFile = new File( filePath );
 			event.setSummary( eventFile.getName() );
 
 			BufferedReader br = new BufferedReader( new FileReader( eventFile ) );

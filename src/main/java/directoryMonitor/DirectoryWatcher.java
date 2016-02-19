@@ -1,5 +1,6 @@
 package directoryMonitor;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.FileVisitResult;
@@ -57,12 +58,14 @@ public class DirectoryWatcher {
 
 					Path path = ev.context();
 					String fullPath = dir.toString().concat("/").concat( path.toString() );
+					File file = new File( fullPath );
+					System.out.println( "==" + file + "==" );
 
 					System.out.println( kind.name() );
 					if( kind.name().equals( "ENTRY_CREATE" ) ) {
 						// register further events
 						System.out.println( fullPath );
-						que.addEvent( fullPath );
+						que.addEvent( file );
 						// this seems to always call ENTRY_MODIFY as well
 					} else if( kind.name().equals( "ENTRY_DELETE" ) ) {
 						System.out.println( path );

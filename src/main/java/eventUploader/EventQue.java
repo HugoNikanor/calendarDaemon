@@ -5,16 +5,17 @@
 
 package eventUploader;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 public class EventQue {
 
-	private static List<String> events;
+	private static List<File> events;
 
 	public EventQue() {
 		if( events == null ) {
-			events = new ArrayList<String>();
+			events = new ArrayList<File>();
 		}
 
 		new Thread( new EventThread() ).start();
@@ -22,7 +23,7 @@ public class EventQue {
 
 	// TODO this should either also take time modified,
 	// or it should just take calendar events
-	public void addEvent( String path ) {
+	public void addEvent( File path ) {
 		events.add( path );
 	}
 
