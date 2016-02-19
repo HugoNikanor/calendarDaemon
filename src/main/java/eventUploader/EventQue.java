@@ -5,19 +5,19 @@
 
 package eventUploader;
 
-import java.nio.file.Path;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class EventQue {
 
-	private static List<Path> events;
 	private static EventThread thread;
+	private static List<File> events;
 
 	public EventQue() {
 		if( events == null ) {
-			events = Collections.synchronizedList( new ArrayList<Path>() );
+			events = Collections.synchronizedList( new ArrayList<File>() );
 		}
 
 		if( thread == null ) {
@@ -28,8 +28,7 @@ public class EventQue {
 
 	// TODO this should either also take time modified,
 	// or it should just take calendar events
-	public void addEvent( Path path ) {
-		System.out.println( path + " added" );
+	public void addEvent( File path ) {
 		events.add( path );
 	}
 

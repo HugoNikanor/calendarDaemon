@@ -1,6 +1,6 @@
 package eventUploader;
 
-import java.nio.file.Path;
+import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -39,26 +39,29 @@ public class EventCreator {
 	// status
 	private Event event;
 
-	public EventCreator( Path path ) {
+	public EventCreator( File file ) {
 		event = new Event();
 
-		Parser parser = new Parser( path );
-		// TODO change to user home
+		Parser parser = new Parser( file );
 
-		event.setDescription( parser.get( "desc" ) );
+		event.setDescription( parser.get( "description" ) );
 		event.setSummary( parser.get( "summary" ) );
 
 		// TODO change default to all day
 		String startStr = parser.get( "startTime" ).replace( '.', ':' );
-		String endStr   = parser.get(  "endTime" ).replace( '.', ':' );
+		String endStr   = parser.get( "endTime" ).replace( '.', ':' );
 
-		endStr = (endStr.charAt(0) == '+' ?
-				DateTransformer.relativeToAbsolute(startStr, endStr) : endStr );
+		if( endStr.charAt(0) == '+' )
+			endStr = DateTransformer.relativeToAbsoluteTime(startStr, endStr);
+
+		System.out.println( startStr );
+		System.out.println( endStr );
 
 		System.out.println( parser.get( "startDate" ).concat(" ").concat( startStr ) );
 		
 		try {
 			// TODO have case to create all day events
+			System.out.println( parser.get( "timeZone" ) );
 			DateTime startDateTime = new DateTime(
 					new SimpleDateFormat("yyyy/MMM/dd hh:mm").parse(
 						parser.get( "startDate" )
@@ -68,10 +71,12 @@ public class EventCreator {
 				.setTimeZone( parser.get( "timeZone" ) )
 				.setDateTime( startDateTime );
 			event.setStart( startTime );
+			event.setEnd( startTime );
 		} catch( ParseException e ) {
 			e.printStackTrace();
 		}
 
+		/*
 		try {
 			// TODO relative end dates
 			DateTime endDateTime = new DateTime(
@@ -85,6 +90,7 @@ public class EventCreator {
 		} catch( ParseException e ) {
 			e.printStackTrace();
 		}
+		*/
 	}
 
 	public Event getEvent() {

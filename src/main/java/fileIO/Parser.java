@@ -3,7 +3,6 @@ package fileIO;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.nio.file.Path;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +14,11 @@ public class Parser {
 	private Map<String, String> values;
 	private static Map<String, String> defaultValues;
 
-	public Parser( Path filePath ) {
+	/**
+	 * TODO update this to allow end of line comments
+	 * currently comments are created by not having a colon on the line 
+	 */
+	public Parser( File file ) {
 		/*
 		EventDateTime startTime = new EventDateTime()
 			.setDateTime(new DateTime(new Date(System.currentTimeMillis()) ) )
@@ -36,9 +39,10 @@ public class Parser {
 			if( defaultValues == null ) {
 				defaultValues = Collections.synchronizedMap( new HashMap<String, String>() );
 
-				File file = new File( "/home/hugo/calendar/.meta/defaultSettings" );
+				// TODO get better path
+				File defaultFile = new File( "/home/hugo/calendar/.meta/defaultSettings" );
 
-				BufferedReader br = new BufferedReader( new FileReader( file ) );
+				BufferedReader br = new BufferedReader( new FileReader( defaultFile ) );
 
 				String line;
 				while( (line = br.readLine()) != null ) {
@@ -62,7 +66,7 @@ public class Parser {
 
 			values = Collections.synchronizedMap( new HashMap<String, String>() );
 
-			File file = filePath.toFile();
+			//File file = filePath;
 
 			// this fails with FileNotFoundException if a directory is given
 			BufferedReader br = new BufferedReader( new FileReader( file ) );
@@ -91,6 +95,8 @@ public class Parser {
 			Matcher m = p.matcher( file.getPath() );
 			if( m.matches() )
 				values.put( "startDate", m.group( 1 ) );
+
+			// TODO end date is not set yet
 
 
 
