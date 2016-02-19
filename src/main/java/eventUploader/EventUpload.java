@@ -15,6 +15,7 @@ public class EventUpload {
 		try {
 			event = APIConnection.getCalendarService().events().insert(calendarId, event).execute();
 			System.out.println( "event uploaded" );
+			System.out.println( event );
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

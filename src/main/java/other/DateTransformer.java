@@ -1,9 +1,6 @@
 package other;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -44,20 +41,16 @@ public class DateTransformer {
 	 * can set years, months and days
 	 * +1y2m3d
 	 * 1 year, 2 months, 3 days
+	 * @param startDate
+	 * 		sholud be on the form yyyy/mm/dd, and nothing else
 	 * @throws ParseException
 	 */
 	public static String relativeToAbsoluteDate(String startDate, String relativeEndDate) throws ParseException {
 
-		Date date = new SimpleDateFormat("MMM")
-			.parse( startDate.substring(5, 8) );
-		Calendar cal = Calendar.getInstance();
-		cal.setTime( date );
-		int months = cal.get(Calendar.MONTH);
-
 		// yyyy / MMM / dd
 		int years  = Integer.parseInt( startDate.substring(0, 4) );
-		//int months = Integer.parseInt( startDate.substring(5, 8) );
-		int days   = Integer.parseInt( startDate.substring(9, 11));
+		int months = Integer.parseInt( startDate.substring(5, 7) );
+		int days   = Integer.parseInt( startDate.substring(8, 10));
 
 		Pattern pattern = Pattern.compile( "^\\+((?<years>\\d+)y|)((?<months>\\d+)m|)((?<days>\\d+)d|)" );
 		Matcher matches = pattern.matcher( relativeEndDate );
@@ -70,7 +63,6 @@ public class DateTransformer {
 			days    += d != null ? Integer.parseInt( d ) : 0;
 		}
 
-		// moths is increased to get it back to human format
-		return String.format( "%04d/%02d/%02d", years, ++months, days );
+		return String.format( "%04d/%02d/%02d", years, months, days );
 	}
 }

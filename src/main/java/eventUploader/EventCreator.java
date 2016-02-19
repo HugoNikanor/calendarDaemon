@@ -11,6 +11,7 @@ import com.google.api.services.calendar.model.EventDateTime;
 import fileIO.Parser;
 
 import other.DateTransformer;
+import other.TimestampFormater;
 
 public class EventCreator {
 	// optional:
@@ -39,7 +40,7 @@ public class EventCreator {
 	// status
 	private Event event;
 
-	public EventCreator( File file ) {
+	public EventCreator(File file) throws ParseException {
 		event = new Event();
 
 		Parser parser = new Parser( file );
@@ -48,41 +49,49 @@ public class EventCreator {
 		event.setSummary( parser.get( "summary" ) );
 
 		// TODO change default to all day
-		String startStr = parser.get( "startTime" ).replace( '.', ':' );
-		String endStr   = parser.get( "endTime" ).replace( '.', ':' );
+		String startTimeStr = TimestampFormater.formatTime(
+				parser.get( "startTime" ).replace( '.', ':' ) );
 
-		if( endStr.charAt(0) == '+' )
-			endStr = DateTransformer.relativeToAbsoluteTime(startStr, endStr);
+		String endTimeStr   = parser.get( "endTime" ).replace( '.', ':' );
+		if( endTimeStr.charAt(0) == '+' )
+			endTimeStr = DateTransformer.
+				relativeToAbsoluteTime(startTimeStr, endTimeStr);
 
-		System.out.println( startStr );
-		System.out.println( endStr );
+		String startDateStr = TimestampFormater.formatDate(
+				parser.get( "startDate" ));
+		String endDateStr = parser.get( "endDate" );
+		if( endDateStr.charAt(0) == '+' )
+			endDateStr = DateTransformer.
+				relativeToAbsoluteDate(startDateStr, endDateStr);
 
-		System.out.println( parser.get( "startDate" ).concat(" ").concat( startStr ) );
+
+		// TODO do same thing for end date 
+
+		//System.out.println( startStr );
+		//System.out.println( endStr );
+
+		//System.out.println( parser.get( "startDate" ).concat(" ").concat( startStr ) );
+
+
+		//String unformatedStartDate = parser.get( "startDate" );
+		
+
 		
 		try {
 			// TODO have case to create all day events
-			System.out.println( parser.get( "timeZone" ) );
 			DateTime startDateTime = new DateTime(
-					new SimpleDateFormat("yyyy/MMM/dd hh:mm").parse(
-						parser.get( "startDate" )
-						.concat( " " )
-						.concat( startStr )));
+					new SimpleDateFormat("yyyy/MM/ddhh:mm").parse(
+						startDateStr + startTimeStr));
+
+			DateTime endDateTime = new DateTime(
+					new SimpleDateFormat("yyyy/MM/ddhh:mm").parse(
+						endDateStr + endTimeStr));
+
 			EventDateTime startTime = new EventDateTime()
 				.setTimeZone( parser.get( "timeZone" ) )
 				.setDateTime( startDateTime );
 			event.setStart( startTime );
-			event.setEnd( startTime );
-		} catch( ParseException e ) {
-			e.printStackTrace();
-		}
 
-		/*
-		try {
-			// TODO relative end dates
-			DateTime endDateTime = new DateTime(
-					new SimpleDateFormat("yyyy/MMM/ddhh:mm").parse(
-						parser.get( "endDate" ).concat(
-							endStr )));
 			EventDateTime endTime = new EventDateTime()
 				.setTimeZone( parser.get( "timeZone" ) )
 				.setDateTime( endDateTime );
@@ -90,7 +99,6 @@ public class EventCreator {
 		} catch( ParseException e ) {
 			e.printStackTrace();
 		}
-		*/
 	}
 
 	public Event getEvent() {
