@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Note that this is only an example! -->
+
+<!-- The filesystem that the logger should
+compare the current filesystem against -->
+<filesystem>
+	<year year="2016" >
+		<month month="jan" >
+			<day day="21" >
+				<Event name="Party" lastedit="201501211722" />
+				<Event name="Dinner" lastedit="201501211722" />
+			</day >
+		</month >
+	</year >
+</filesystem>

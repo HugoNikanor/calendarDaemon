@@ -1,0 +1,17 @@
+# event name is decided by the file name
+timeZone: GMT+01:00
+description: blank
+
+startTime: 00:00
+endTime: +1h
+# 'startDate' is decided by the file path
+endDate: +0d
+
+color: blue
+location: no location
+
+--- not yet ---
+# day, week, month, year
+requring: day 1
+remainders: mail 15; notify 10
+

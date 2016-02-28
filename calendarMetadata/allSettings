@@ -1,0 +1,21 @@
+# I believe comments are created by not having a colon in the text
+
+description: Information about the event
+
+# times can be set with both ':' and '.'
+# end times can be set as both exact and relative time
+startTime: 13:00
+endTime: +1h30m
+endDate: +1d
+
+timeZone: GMT+01:00
+
+
+--- not yet ---
+color: blue
+location: Waystreet 123
+
+# day, week, month, year
+requring: 1d
+remainders: mail 15; notify 10
+

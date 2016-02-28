@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Note that this is only an example! -->
+
+<!-- events yet to be sent to the server -->
+<eventque >
+	<event type="modify" timestamp=000000 path="2016/jan/21/Party" />
+	<event type="create" timestamp=000000 path="2016/jan/21/Dinner" />
+	<event type="delete" timestamp=000000 path="2016/jan/21/misse" />
+</eventque >
