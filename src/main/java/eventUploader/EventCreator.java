@@ -65,8 +65,6 @@ public class EventCreator {
 				relativeToAbsoluteDate(startDateStr, endDateStr);
 
 
-		// TODO do same thing for end date 
-
 		//System.out.println( startStr );
 		//System.out.println( endStr );
 

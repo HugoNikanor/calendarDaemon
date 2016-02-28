@@ -9,6 +9,7 @@ import java.io.File;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 public class EventQue {
@@ -29,11 +30,19 @@ public class EventQue {
 
 	// TODO this should either also take time modified,
 	// or it should just take calendar events
-	public void addEvent( File path ) {
+	public void addEvent( File path, Date lastmodified ) {
+		// write to xml archives
 		events.add( path );
 	}
 
 	private class EventThread implements Runnable {
+
+		/*
+		 * Every x secounds, check the xml files for events
+		 * if there are any events, upload them to the server
+		 *
+		 * After they are uploaded, delete them from the xml file
+		 */
 
 		@Override
 		public void run() {

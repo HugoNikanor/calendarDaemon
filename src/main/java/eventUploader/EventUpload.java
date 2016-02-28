@@ -8,7 +8,7 @@ import serverConnection.APIConnection;
 
 public class EventUpload {
 
-	// is this thread safe
+	// is this thread safe?
 	public static void upload( Event event ) {
 
 		String calendarId = "primary";

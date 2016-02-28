@@ -11,6 +11,7 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,6 +20,9 @@ import eventUploader.EventQue;
 import java.nio.file.StandardWatchEventKinds;
 import java.nio.file.WatchEvent;
 
+/**
+ * TODO register newly created directories
+ */
 public class DirectoryWatcher {
 
 	private WatchService watcher;
@@ -64,6 +68,7 @@ public class DirectoryWatcher {
 					// check if file is in correct dir, else throw a non fatal error and write it to the log
 
 					// check if file is directory, and if it is register the dir
+					// TODO actually register the new dir
 					if( eventFile.isDirectory() ) {
 						System.out.println( "is dir" );
 						continue;
@@ -76,7 +81,7 @@ public class DirectoryWatcher {
 					System.out.println( eventFile );
 					switch( kind.name() ) {
 					case "ENTRY_CREATE":
-						que.addEvent( eventFile );
+						que.addEvent( eventFile, new Date() );
 						// this also calls ENTRY_MODIFY
 						break;
 					case "ENTRY_MODIFY":

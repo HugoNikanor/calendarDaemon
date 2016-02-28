@@ -11,6 +11,10 @@ import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventDateTime;
 
+/**
+ * Currently used to create a test event
+ * Change to what is needed in the moment
+ */
 public class Test {
 
 	public Test() {
