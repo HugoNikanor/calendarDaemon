@@ -2,7 +2,9 @@ package fileIO;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,14 +22,20 @@ public class Parser {
 	 * TODO update this to allow end of line comments
 	 * currently comments are created by not having a colon on the line 
 	 */
-	public Parser( File file ) {
+	public Parser( File file ) throws FileNotFoundException, IOException {
 		this.file = file;
 		defFile = new File( System.getProperty( "user.home" )
 								.concat("/calendar/.meta/defaultSettings") );
+
+		values = createMap( file );
+
+		//System.out.println( this );
 	}
 
-	private Map<String, String> createMap( File path ) throws Exception {
-		Map<String, String> valueMap = Collections.synchronizedMap( new HashMap<String, String>() );
+	private Map<String, String> createMap( File path )
+		throws FileNotFoundException, IOException {
+		Map<String, String> valueMap =
+		   	Collections.synchronizedMap( new HashMap<String, String>() );
 
 		// this fails with FileNotFoundException if a directory is given
 		BufferedReader br = new BufferedReader( new FileReader( path ) );
@@ -51,8 +59,6 @@ public class Parser {
 
 		valueMap.put( "summary", file.getName() );
 
-		// TODO this puts the whole path, it should only put the date part (2016/jan/22)
-		// Does it?
 		Pattern p = Pattern.compile( ".*(\\d{4}+/.../\\d+).*" );
 		Matcher m = p.matcher( file.getPath() );
 		if( m.matches() )
@@ -63,13 +69,8 @@ public class Parser {
 		return valueMap;
 	}
 
-	//private void setupWriter() {
-	//}
-
 	// both of these should maybe throw some sort of error
 	public String get( String key ) throws Exception {
-		if( values == null ) 
-			values = createMap( file );
 		if( defaultValues == null ) 
 			defaultValues = createMap( defFile );
 
@@ -79,6 +80,28 @@ public class Parser {
 		   	values.get( key ) : defaultValues.get( key );
 	}
 
-	public void write( String key, String value ) {
+	/**
+	 * Adds a key value pair to the values
+	 */
+	public void put( String key, String value ) {
+		values.put( key, value );
+	}
+
+	/**
+	 * writes the values back to the file
+	 * TODO This should have some sort of lock check if the file is currently open
+	 */
+	public void write() {
+		for( String key : values.keySet() ) {
+		}
+	}
+
+	@Override
+	public String toString() {
+		String ret = "";
+		for( String key : values.keySet() ) {
+			ret += key + ": " + values .get( key ) + "\n";
+		}
+		return ret;
 	}
 }
