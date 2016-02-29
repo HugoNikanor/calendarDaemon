@@ -57,7 +57,7 @@ public class EventCreator {
 			endTimeStr = DateTransformer.
 				relativeToAbsoluteTime(startTimeStr, endTimeStr);
 
-		String startDateStr = TimestampFormater.formatDate(
+		String startDateStr = TimestampFormater.dateEngToNum(
 				parser.get( "startDate" ));
 		String endDateStr = parser.get( "endDate" );
 		if( endDateStr.charAt(0) == '+' )
