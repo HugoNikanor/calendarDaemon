@@ -1,9 +1,11 @@
 package fileIO;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
@@ -91,16 +93,19 @@ public class Parser {
 	 * writes the values back to the file
 	 * TODO This should have some sort of lock check if the file is currently open
 	 */
-	public void write() {
+	public void write() throws IOException {
+		BufferedWriter bw = new BufferedWriter( new FileWriter(file) );
 		for( String key : values.keySet() ) {
+			bw.write( String.format( "%s: %s", key, values.get(key) ) );
 		}
+		bw.close();
 	}
 
 	@Override
 	public String toString() {
 		String ret = "";
 		for( String key : values.keySet() ) {
-			ret += key + ": " + values .get( key ) + "\n";
+			ret = String.format( "%s: %s\n", key, values.get(key) );
 		}
 		return ret;
 	}
