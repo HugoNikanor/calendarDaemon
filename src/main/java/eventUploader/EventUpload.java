@@ -14,12 +14,10 @@ public class EventUpload {
 		String calendarId = "primary";
 		try {
 			event = APIConnection.getCalendarService().events().insert(calendarId, event).execute();
-			System.out.println( "event uploaded" );
+			//System.out.println( "event uploaded" );
 			System.out.println( event );
 
 			fileIO.EventToFile.write( event );
-
-			// TODO write updated event back to source file
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
