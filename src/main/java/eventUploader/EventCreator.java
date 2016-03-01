@@ -40,7 +40,7 @@ public class EventCreator {
 	// status
 	private Event event;
 
-	public EventCreator(File file) throws ParseException {
+	public EventCreator(File file) throws Exception {
 		event = new Event();
 
 		Parser parser = new Parser( file );

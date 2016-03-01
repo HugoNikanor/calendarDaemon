@@ -6,7 +6,6 @@
 package eventUploader;
 
 import java.io.File;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -46,7 +45,7 @@ public class EventQue {
 						// if the event is "fine"
 						try {
 							EventUpload.upload( new EventCreator( events.get(0) ).getEvent() );
-						} catch( ParseException e ) {
+						} catch( Exception e ) {
 							// TODO log this error to the user
 							e.printStackTrace();
 						}
