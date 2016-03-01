@@ -24,40 +24,48 @@ public class Parser {
 	 * TODO update this to allow end of line comments
 	 * currently comments are created by not having a colon on the line 
 	 */
-	public Parser( File file ) throws FileNotFoundException, IOException {
+	public Parser( File file ) throws IOException {
 		this.file = file;
+		
+		// If this file is missing then it's rather bad
+		// TODO throw some serius error
 		defFile = new File( System.getProperty( "user.home" )
 								.concat("/calendar/.meta/defaultSettings") );
 
 		values = createMap( file );
-
-		//System.out.println( this );
 	}
 
-	private Map<String, String> createMap( File path )
-		throws FileNotFoundException, IOException {
+	private Map<String, String> createMap( File path ) throws IOException {
 		Map<String, String> valueMap =
 		   	Collections.synchronizedMap( new HashMap<String, String>() );
 
 		// this fails with FileNotFoundException if a directory is given
-		BufferedReader br = new BufferedReader( new FileReader( path ) );
+		try {
+			BufferedReader br = new BufferedReader( new FileReader( path ) );
+			String line;
+			while( (line = br.readLine()) != null ) {
+				String key;
+				String value;
 
-		String line;
-		while( (line = br.readLine()) != null ) {
-			String key;
-			String value;
+				int sepPos = line.indexOf( ':' );
+				if( sepPos != -1 ) {
+					key = line.substring(0, sepPos);
+					value = line.substring( sepPos + 1 );
 
-			int sepPos = line.indexOf( ':' );
-			if( sepPos != -1 ) {
-				key = line.substring(0, sepPos);
-				value = line.substring( sepPos + 1 );
+					// removes surrounding whitespace
+					value = value.trim();
 
-				// removes surrounding whitespace
-				value = value.trim();
-
-				valueMap.put( key, value );
+					valueMap.put( key, value );
+				}
 			}
+			br.close();
+		} catch( FileNotFoundException e ) {
+			//e.printStackTrace();
+			// if the file is not found data can't be read from it
+			// instead this will create the file once data is written
+			// to it with the write method
 		}
+
 
 		valueMap.put( "summary", file.getName() );
 
@@ -66,7 +74,6 @@ public class Parser {
 		if( m.matches() )
 			valueMap.put( "startDate", m.group( 1 ) );
 
-		br.close();
 
 		return valueMap;
 	}
@@ -75,8 +82,6 @@ public class Parser {
 	public String get( String key ) throws Exception {
 		if( defaultValues == null ) 
 			defaultValues = createMap( defFile );
-
-		if( values == null ) System.out.println( "es ist NULL" );
 
 		return values.containsKey( key ) ?
 		   	values.get( key ) : defaultValues.get( key );
