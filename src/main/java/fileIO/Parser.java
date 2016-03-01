@@ -90,13 +90,16 @@ public class Parser {
 	}
 
 	/**
-	 * writes the values back to the file
+	 * writes the values back to the file <br>
+	 * Note that this also writes the summary and start date to the file,
+	 * but not anything form the default config
 	 * TODO This should have some sort of lock check if the file is currently open
 	 */
 	public void write() throws IOException {
 		BufferedWriter bw = new BufferedWriter( new FileWriter(file) );
 		for( String key : values.keySet() ) {
 			bw.write( String.format( "%s: %s", key, values.get(key) ) );
+			bw.newLine();
 		}
 		bw.close();
 	}
