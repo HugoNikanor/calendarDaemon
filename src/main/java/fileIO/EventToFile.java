@@ -51,6 +51,7 @@ public class EventToFile {
 		p.put("created", event.getCreated().toString() );
 		p.put("creatorEmail", event.getCreator().getEmail() );
 		p.put("updated", event.getUpdated().toString() );
+		p.put( "id", event.getId() );
 		// TODO possibly get more values to write
 
 		p.write();
