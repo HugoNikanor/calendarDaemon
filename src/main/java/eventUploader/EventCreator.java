@@ -1,6 +1,7 @@
 package eventUploader;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -40,7 +41,7 @@ public class EventCreator {
 	// status
 	private Event event;
 
-	public EventCreator(File file) throws Exception {
+	public EventCreator(File file) throws IOException {
 		event = new Event();
 
 		Parser parser = new Parser( file );
