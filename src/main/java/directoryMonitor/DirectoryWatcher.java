@@ -63,9 +63,10 @@ public class DirectoryWatcher {
 
 					// check if file is in correct dir, else throw a non fatal error and write it to the log
 
-					// check if file is directory, and if it is register the dir
 					if( eventFile.isDirectory() ) {
 						System.out.println( "is dir" );
+						registerEvents( Paths.get( "/home/hugo/calendar" ) );
+
 						continue;
 					}
 
