@@ -10,17 +10,23 @@ public class TimestampFormater {
 	/**
 	 * goes from 2016/jan/13 to 2016/01/13
 	 */
-	public static String dateEngToNum( String date ) throws ParseException {
-		Date d = new SimpleDateFormat("MMM")
-			.parse( date.substring(5, 8) );
-		Calendar cal = Calendar.getInstance();
-		cal.setTime( d );
+	public static String dateEngToNum( String date ) {
+		String formatedDate;
+		try {
+			Date d = new SimpleDateFormat("MMM")
+				.parse( date.substring(5, 8) );
+			Calendar cal = Calendar.getInstance();
+			cal.setTime( d );
 
-		String formatedDate = String.format( "%04d/%02d/%02d",
-			Integer.parseInt( date.substring(0, 4) ),
-			cal.get(Calendar.MONTH) + 1,
-			Integer.parseInt( date.substring(9, 11) ));
-
+			formatedDate = String.format( "%04d/%02d/%02d",
+				Integer.parseInt( date.substring(0, 4) ),
+				cal.get(Calendar.MONTH) + 1,
+				Integer.parseInt( date.substring(9, 11) ));
+		} catch( ParseException e ) {
+			// TODO this exception should maybe be handled more gracefully
+			formatedDate = "";
+			e.printStackTrace();
+		}
 		return formatedDate;
 	}
 

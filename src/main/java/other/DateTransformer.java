@@ -45,7 +45,7 @@ public class DateTransformer {
 	 * 		sholud be on the form yyyy/mm/dd, and nothing else
 	 * @throws ParseException
 	 */
-	public static String relativeToAbsoluteDate(String startDate, String relativeEndDate) throws ParseException {
+	public static String relativeToAbsoluteDate(String startDate, String relativeEndDate) {
 
 		// yyyy / MMM / dd
 		int years  = Integer.parseInt( startDate.substring(0, 4) );

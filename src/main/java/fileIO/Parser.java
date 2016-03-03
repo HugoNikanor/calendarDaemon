@@ -79,7 +79,7 @@ public class Parser {
 	}
 
 	// both of these should maybe throw some sort of error
-	public String get( String key ) throws Exception {
+	public String get( String key ) throws IOException {
 		if( defaultValues == null ) 
 			defaultValues = createMap( defFile );
 
