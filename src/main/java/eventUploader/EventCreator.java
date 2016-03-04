@@ -17,9 +17,9 @@ import other.TimestampFormater;
 public class EventCreator {
 	// optional:
 	// colorId
-	// description
-	// location
-	// requring
+	// description - done
+	// location - done
+	// repeat
 	// remiainders
 	// status
 	// transparency
@@ -28,14 +28,15 @@ public class EventCreator {
 	//
 	//
 	// required:
-	// summary — Event name (file name)
-	// creator (auto set?)
-	// end time and date
-	// start time and date
-	// timezone (have default)
+	// summary — Event name (file name) - done
+	// creator (auto set?) - creator email auto set
+	// end time and date - done possibly merge 'endDate' and 'endTime' 
+	// 			into one variable
+	// start time and date - done
+	// timezone (have default) - done
 	//
 	//
-	// futurn:
+	// future:
 	// attendees
 	// organizer
 	// status
@@ -66,18 +67,6 @@ public class EventCreator {
 				relativeToAbsoluteDate(startDateStr, endDateStr);
 
 
-		// TODO do same thing for end date 
-
-		//System.out.println( startStr );
-		//System.out.println( endStr );
-
-		//System.out.println( parser.get( "startDate" ).concat(" ").concat( startStr ) );
-
-
-		//String unformatedStartDate = parser.get( "startDate" );
-		
-
-		
 		try {
 			// TODO have case to create all day events
 			DateTime startDateTime = new DateTime(
@@ -100,6 +89,12 @@ public class EventCreator {
 		} catch( ParseException e ) {
 			e.printStackTrace();
 		}
+
+		// TODO possibly change this to using 'event.set("key", "value")' 
+		// and store the supported keys in a file
+		event.setLocation( parser.get( "location" ) );
+		// TODO support british spelling
+		event.setColorId(  parser.get( "color" ) );
 	}
 
 	public Event getEvent() {
