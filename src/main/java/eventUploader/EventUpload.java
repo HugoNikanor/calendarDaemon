@@ -19,15 +19,19 @@ public class EventUpload {
 
 		String calendarId = "primary";
 		try {
+			/*
 			if( event.getId() != null )
 				event = APIConnection.getCalendarService().events().update(calendarId, event.getId(), event).execute();
 			else
-				event = APIConnection.getCalendarService().events().insert(calendarId, event).execute();
+			*/
+			System.out.println( event );
+			event = APIConnection.getCalendarService().events().insert(calendarId, event).execute();
 
+			System.out.println( "————————————————————————————————————————————————————————————————————————————————" );
 			//System.out.println( "event uploaded" );
 			System.out.println( event );
 
-			fileIO.EventToFile.write( event );
+			//fileIO.EventToFile.write( event );
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

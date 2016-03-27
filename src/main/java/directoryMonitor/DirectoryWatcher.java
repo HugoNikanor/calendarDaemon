@@ -81,7 +81,7 @@ public class DirectoryWatcher {
 						// this also calls ENTRY_MODIFY
 						break;
 					case "ENTRY_MODIFY":
-						que.addEvent( eventFile );
+						//que.addEvent( eventFile );
 						// put event in upload and sync que
 						break;
 					case "ENTRY_DELETE":

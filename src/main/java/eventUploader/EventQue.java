@@ -6,6 +6,7 @@
 package eventUploader;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -22,15 +23,18 @@ public class EventQue {
 
 		if( thread == null ) {
 			thread = new EventThread();
-			new Thread( thread ).start();
+			//new Thread( thread ).start();
 		}
 	}
 
-	public void addEvent( File path ) {
+	public void addEvent( File path ) throws IOException {
+		/*
 		if( events.contains(path) ) {
 			events.remove( path );
 		}
 		events.add( new EventQueObject( path, 10 ) );
+		*/
+		EventUpload.upload( new EventCreator( path ).getEvent() );
 	}
 
 	private class EventThread implements Runnable {
