@@ -94,7 +94,7 @@ public class EventCreator {
 		// and store the supported keys in a file
 		event.setLocation( parser.get( "location" ) );
 		// TODO support british spelling
-		event.setColorId(  parser.get( "color" ) );
+		//event.setColorId(  parser.get( "color" ) );
 	}
 
 	public Event getEvent() {
